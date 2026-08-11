@@ -181,6 +181,10 @@ const registerUser = async (req, res) => {
 
     const verificationLink = 
          `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}`;
+
+    console.log("REGISTER: user created:", user._id);
+
+console.log("REGISTER: attempting to send verification email");
     
     await sendEmail({
         to: user.email,
