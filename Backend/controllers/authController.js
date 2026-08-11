@@ -124,7 +124,15 @@ const resendVerificationEmail = async (req, res) => {
 
 //Register User
 const registerUser = async (req, res) => {
+    console.log("REGISTER: request received");
     const { fullName, email, password, profileImageUrl } = req.body;
+
+    console.log("REGISTER: data received", {
+        fullName,
+        email,
+        hasPassword: !!password,
+        profileImageUrl
+    });
 
      const existingUser = await User.findOne({ email });
 
@@ -153,6 +161,12 @@ const registerUser = async (req, res) => {
         user.password = password;
         user.profileImageUrl = profileImageUrl;
     }
+
+    console.log("REGISTER: user created:", user._id);
+
+    // Your verification token code...
+
+    console.log("REGISTER: attempting to send email");
 
     const verificationToken = crypto.randomBytes(32).toString('hex');
 
@@ -208,11 +222,12 @@ const registerUser = async (req, res) => {
         `,
     });
 
-    // 3. Send successful response
+     console.log("REGISTER: email sent successfully");
+
     res.status(StatusCodes.CREATED).json({
         msg: 'Registration successful. Please check your email to verify your account.',
     });
-
+    console.log("REGISTER: response sent");
 };
 
 //Login User
