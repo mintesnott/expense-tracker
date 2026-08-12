@@ -12,7 +12,42 @@ const AddExpenseForm = ({ onAddExpense, initialData, isEdit }) => { //#income
     icon: initialData?.icon || "",
   });
 
-  const handleChange = (key, value) => setExpense({ ...expense, [key]: value });
+  const [errors, setErrors] = useState({});
+
+  const handleChange = (key, value) => {
+            setExpense({ ...expense, [key]: value });
+            setErrors({ ...errors, [key]: "" });
+          }
+
+  const handleSubmit = () => {
+      const newErrors = {};
+
+      if (!expense.category.trim()) {
+          newErrors.category = "Expense category is required";
+      }
+
+      if (
+          !expense.amount ||
+          isNaN(expense.amount) ||
+          Number(expense.amount) <= 0
+      ) {
+          newErrors.amount = "Amount must be greater than 0";
+      }
+
+      if (!expense.date) {
+          newErrors.date = "Date is required";
+      }
+
+       if (!expense.icon) {
+          newErrors.icon = "Please select an icon";
+      }
+
+      setErrors(newErrors);
+
+      if (Object.keys(newErrors).length === 0) {
+          onAddExpense(expense);
+      }
+  };
 
   return (
     <div>
@@ -20,6 +55,11 @@ const AddExpenseForm = ({ onAddExpense, initialData, isEdit }) => { //#income
         icon={expense.icon}
         onSelect={(selectedIcon) => handleChange("icon", selectedIcon)}
       />
+      {errors.icon && (
+            <p className="text-red-500 text-xs mt-1">
+                {errors.icon}
+            </p>
+        )}
 
       <Input
         value={expense.category}
@@ -28,6 +68,11 @@ const AddExpenseForm = ({ onAddExpense, initialData, isEdit }) => { //#income
         placeholder="Rent, Groceries, etc"
         type="text"
       />
+      {errors.category && (
+          <p className="text-red-500 text-xs mt-1">
+              {errors.category}
+          </p>
+      )}
 
       <Input
         value={expense.amount}
@@ -36,6 +81,11 @@ const AddExpenseForm = ({ onAddExpense, initialData, isEdit }) => { //#income
         placeholder=""
         type="number"
       />
+       {errors.amount && (
+          <p className="text-red-500 text-xs mt-1">
+              {errors.amount}
+          </p>
+      )}
 
       <Input
         value={expense.date}
@@ -45,12 +95,17 @@ const AddExpenseForm = ({ onAddExpense, initialData, isEdit }) => { //#income
         type="date"
         max={new Date().toISOString().split("T")[0]}
       />
+       {errors.date && (
+          <p className="text-red-500 text-xs mt-1">
+              {errors.date}
+          </p>
+      )}
 
       <div className="flex justify-end mt-6">
         <button
           type="button"
           className="add-btn add-btn-fill"
-          onClick={() => onAddExpense(expense)}
+          onClick={handleSubmit}
         >
           {isEdit ? "Update Expense" : "Add Expense"}
         </button>

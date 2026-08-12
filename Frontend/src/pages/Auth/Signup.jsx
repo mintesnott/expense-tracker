@@ -59,14 +59,14 @@ const Signup = () => {
             profileImageUrl,
           });
           
-          if (response.data && (response.data.success === true || response.status === 201))
+          if (response.data && response.status === 201)
             
             {
-            toast.success("Successfully registered! Please Verify Your email.");
+            toast.success(response.data.msg);
             navigate("/login")
           }
         } catch(err) {
-          setError(err.backendMessage);
+          setError(err.backendMessage || "Registration failed");
         }
   }
 

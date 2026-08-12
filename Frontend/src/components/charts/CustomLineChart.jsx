@@ -15,7 +15,6 @@ const CustomLineChart = ({ data }) => {
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
-      console.log(data.category);
       
       return (
         <div className="bg-white shadow-md rounded-lg p-2 border border-gray-300">

@@ -85,14 +85,16 @@ const Profile = () => {
             setIsEditing(false);
 
             if (emailChanged) {
-                localStorage.removeItem("token");
-                clearUser();
+                updateUser(response.data.user);
 
-                toast.success(
-                    "Email changed. Please verify your new email."
-                );
+                toast.success(response.data.msg);
 
-                navigate("/login");
+                if (!response.data.user.isVerified) {
+                    localStorage.removeItem("token");
+                    clearUser();
+                    navigate("/login");
+                }
+
                 return;
             }
 
@@ -101,16 +103,7 @@ const Profile = () => {
             toast.success(response.data.msg);
 
         } catch (err) {
-            console.log("UPDATE PROFILE ERROR:", err);
-            console.log("STATUS:", err.response?.status);
-            console.log("DATA:", err.response?.data);
-            console.log("BACKEND MESSAGE:", err.backendMessage);
-
-            toast.error(
-                err.response?.data?.msg ||
-                err.backendMessage ||
-                "Failed to update profile"
-            );
+            console.error("UPDATE PROFILE ERROR:", err);
         } finally {
             setLoading(false);
         }
@@ -126,7 +119,6 @@ const Profile = () => {
 
         handleUpdateProfile();
     };
-
 
     // PROFILE IMAGE
     const handleProfileImageChange = async (e) => {
@@ -228,7 +220,7 @@ const Profile = () => {
             navigate("/login");
 
         } catch (err) {
-            console.log(
+            console.error(
                 "CHANGE PASSWORD ERROR:",
                 err
             );
@@ -616,10 +608,8 @@ const Profile = () => {
                     <div className="mt-4 rounded-lg bg-amber-50 border border-amber-200 p-4">
 
                         <p className="text-sm text-amber-800 leading-6">
-                            Your current email address will no longer be
-                            verified. After changing it, you will be logged
-                            out and you'll need to verify your new email
-                            address before you can log in again.
+                            Your email address will be changed to the new address.
+                            Depending on the current account settings, you may need to verify your new email address before continuing.
                         </p>
 
                     </div>

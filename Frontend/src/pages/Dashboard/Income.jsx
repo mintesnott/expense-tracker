@@ -163,11 +163,7 @@ const Income = () => {
       await fetchIncomeDetails();
 
     } catch (err) {
-        console.log("UPDATE ERROR:", err);
-        console.log("REQUEST:", err.request);
-        console.log("RESPONSE:", err.response);
-        console.log("MESSAGE:", err.message);
-
+       
         toast.error(
             err.backendMessage || "Failed to update income"
         );

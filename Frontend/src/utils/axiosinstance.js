@@ -5,8 +5,6 @@ const axiosInstance = axios.create({
     timeout: 10000,
 });
 
-console.log("API BASE URL:", axiosInstance.defaults.baseURL);
-
 
 //Request Interceptor
 

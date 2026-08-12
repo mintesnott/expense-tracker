@@ -91,9 +91,9 @@ function Login() {
           <Input
             value= {password}
             onChange = {({ target }) => {
-              setPassword(target.value,
-              setShowVerification(false),
-              )}}
+                setPassword(target.value);
+                setShowVerification(false);
+              }}
             label = "Password"
             placeholder = 'enter a password with a minimum of 8 character'
             type="password"
